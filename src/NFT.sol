@@ -5,8 +5,9 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CollectionNFT is ERC721, ERC721Enumerable, ERC721URIStorage {
+contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
 
     uint256 constant maxSupply = 10000;
@@ -15,7 +16,7 @@ contract CollectionNFT is ERC721, ERC721Enumerable, ERC721URIStorage {
 
     constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
 
-    function mint(address _owner, uint256 _amount, string memory _tokenURI) external {
+    function mint(address _owner, uint256 _amount, string memory _tokenURI) external onlyOwner {
         for (uint256 i; i < _amount; i++) {
             _tokenId.increment();
             uint256 tokenId = _tokenId.current();
