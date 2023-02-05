@@ -5,7 +5,7 @@ import "../lib/forge-std/src/Script.sol";
 import "../src/NFTSell.sol";
 import "../src/NFT.sol";
 
-contract NFTScript is Script {
+contract DeployNFTSell is Script {
     NFT public nft;
 
     function run() public {

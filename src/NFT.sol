@@ -20,7 +20,7 @@ contract NFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         for (uint256 i; i < _amount; i++) {
             _tokenId.increment();
             uint256 tokenId = _tokenId.current();
-            _safeMint(_owner, tokenId);
+            _mint(_owner, tokenId);
             _setTokenURI(tokenId, _tokenURI);
         }
     }
