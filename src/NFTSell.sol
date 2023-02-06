@@ -31,6 +31,14 @@ contract NFTSell is Ownable, ReentrancyGuard {
     mapping(uint256 => Product) private s_productsById;
     uint256 private s_nextProductId;
 
+    event ProductListed(
+        uint256 indexed _productId,
+        string indexed _productName,
+        uint256 indexed _price,
+        uint256[] _tokenIds
+    );
+    event ProductBought(uint256 indexed _productId, uint256[] _tokenIds);
+
     constructor(IERC721 _nft) {
         s_buyers.push(address(0));
         nft = _nft;
@@ -53,6 +61,7 @@ contract NFTSell is Ownable, ReentrancyGuard {
 
             product._idOfTokens.push(_tokenIds[i]);
         }
+        emit ProductListed(s_nextProductId, _productName, _price, _tokenIds);
         _listProduct(_productName, _tokenIds, _price);
     }
 
@@ -84,10 +93,11 @@ contract NFTSell is Ownable, ReentrancyGuard {
             revert SoldOut();
         }
         _buy(_productId, _tokenIds);
-        if (_checkBuyer()) {
+        if (!_checkBuyer()) {
             s_buyers.push(msg.sender);
         }
         _updateLeft(_productId, _tokenIds);
+        emit ProductBought(_productId, _tokenIds);
     }
 
     function _buy(uint256 _productId, uint256[] calldata _tokenIds) internal {
