@@ -89,9 +89,6 @@ contract NFTSell is Ownable, ReentrancyGuard {
         if (_tokenIds.length > product._left) {
             revert TooMuchAmount();
         }
-        if (product._left == 0) {
-            revert SoldOut();
-        }
         _buy(_productId, _tokenIds);
         if (!_checkBuyer()) {
             s_buyers.push(msg.sender);
@@ -118,9 +115,9 @@ contract NFTSell is Ownable, ReentrancyGuard {
         }
     }
 
-    function _updateLeft(uint256 _productId, uint256[] calldata _tokenIds) internal view {
+    function _updateLeft(uint256 _productId, uint256[] calldata _tokenIds) internal {
         Product storage product = s_productsById[_productId];
-        product._left.sub(_tokenIds.length);
+        product._left = product._left.sub(_tokenIds.length);
     }
 
     function _checkBuyer() internal view returns (bool) {
